@@ -8,9 +8,9 @@ export default function Footer() {
     <footer className="bg-[#404297] text-white py-16 px-6">
       <div className="max-w-6xl mx-auto">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-12 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-7 gap-12 mb-12">
           {/* Left: Brand & Description */}
-          <div className="col-span-2 md:col-span-3 pb-8 md:pb-0 border-b md:border-b-0 border-gray-400">
+          <div className="col-span-2 md:col-span-2 pb-8 md:pb-0 border-b md:border-b-0 border-gray-400">
             <Link href="/" className="inline-block mb-6">
               <Image
                 src="/Speedlink-Logo-Secondary.webp"
@@ -72,10 +72,12 @@ export default function Footer() {
             </div>
           </div>
 
+          <div className="col-span-2 md:col-span-1 pb-8 hidden md:block"></div>
+
           {/* Services Column */}
-          <div className="col-span-2 md:col-span-1 pb-8 md:pb-0 border-b md:border-b-0 border-gray-400">
+          <div className="col-span-2 md:col-span-2 pb-8 md:pb-0 border-b md:border-b-0 border-gray-400">
             <h3 className="text-sm font-bold tracking-widest uppercase mb-6">Services</h3>
-            <ul className="space-y-3">
+            <ul className="space-y-1.5">
               <li>
                 <Link href="/services/it-services" className="text-gray-300 hover:text-white transition-colors">
                   IT Services
@@ -112,7 +114,7 @@ export default function Footer() {
           {/* Products Column */}
           <div className="col-span-1 md:col-span-1 pb-8 md:pb-0">
             <h3 className="text-sm font-bold tracking-widest uppercase mb-6">Products</h3>
-            <ul className="space-y-3">
+            <ul className="space-y-1.5">
               <li>
                 <Link href="/products/e-learning" className="text-gray-300 hover:text-white transition-colors">
                   E-Learning
@@ -149,7 +151,7 @@ export default function Footer() {
           {/* Company Column */}
           <div className="col-span-1 md:col-span-1 pb-8 md:pb-0">
             <h3 className="text-sm font-bold tracking-widest uppercase mb-6">Company</h3>
-            <ul className="space-y-3">
+            <ul className="space-y-1.5">
               <li>
                 <Link href="/about" className="text-gray-300 hover:text-white transition-colors">
                   About Us
@@ -177,7 +179,7 @@ export default function Footer() {
         {/* Divider */}
         <div className="border-t border-gray-400 pt-8">
           <div className="flex flex-row justify-between items-center">
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-gray-400-semibold">
               © 2026 Speedlink Hi-Tech Solutions
             </p>
             <Link href="/developers" className="text-sm text-gray-400 hover:text-white transition-colors">

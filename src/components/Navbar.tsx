@@ -20,12 +20,12 @@ export default function Navbar() {
           <Image src="/1-1536x638.webp" alt="Speedlink" width={160} height={45} priority className="object-contain" />
         </Link>
 
-        <nav className="flex items-center gap-8">
-          <Link href="/about" className="text-sm font-medium text-gray-700 hover:text-[#EE3539] transition-colors">About</Link>
+        <nav className="flex items-center gap-4">
+          <Link href="/about" className="text-sm font-medium text-[#707070] hover:text-[#EE3539] transition-colors">About</Link>
 
           {/* Products Mega Menu */}
           <div className="relative" onMouseEnter={() => setActiveDropdown("products")} onMouseLeave={() => setActiveDropdown(null)}>
-            <button className="flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-[#EE3539] cursor-pointer">
+            <button className="flex items-center gap-1 text-sm font-medium text-[#707070] hover:text-[#EE3539] cursor-pointer">
               Products
               <svg className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === "products" ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -61,7 +61,7 @@ export default function Navbar() {
 
           {/* Services Mega Menu */}
           <div className="relative" onMouseEnter={() => setActiveDropdown("services")} onMouseLeave={() => setActiveDropdown(null)}>
-            <button className="flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-[#EE3539] cursor-pointer">
+            <button className="flex items-center gap-1 text-sm font-medium text-[#707070] hover:text-[#EE3539] cursor-pointer">
               Services
               <svg className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === "services" ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -91,7 +91,7 @@ export default function Navbar() {
                       {["Corporate Training", "Tutor-led Training", "Self-paced Training", "SIWES Placement"].map((label) => (
                         <li key={label}>
                           <Link href="/services/training" onClick={() => setActiveDropdown(null)}
-                            className="text-sm text-gray-600 hover:text-[#404297] transition-colors">{label}</Link>
+                            className="text-sm text-[#707070] hover:text-[#404297] transition-colors">{label}</Link>
                         </li>
                       ))}
                     </ul>
@@ -111,7 +111,7 @@ export default function Navbar() {
                       <div className="w-10 h-10 rounded-full bg-[#eeeef8] flex items-center justify-center text-[#404297] text-lg flex-shrink-0">{item.icon}</div>
                       <div>
                         <p className="text-xs font-bold text-[#404297] uppercase tracking-wider">{item.label}</p>
-                        <p className="text-xs text-gray-500 mt-0.5">{item.sub}</p>
+                        <p className="text-xs text-[#707070] mt-0.5">{item.sub}</p>
                       </div>
                     </Link>
                   ))}
@@ -120,8 +120,8 @@ export default function Navbar() {
             )}
           </div>
 
-          <Link href="/case-studies" className="text-sm font-medium text-gray-700 hover:text-[#EE3539] transition-colors">Case Studies</Link>
-          <Link href="/insights" className="text-sm font-medium text-gray-700 hover:text-[#EE3539] transition-colors">Insights</Link>
+          <Link href="/case-studies" className="text-sm font-medium text-[#707070] hover:text-[#EE3539] transition-colors">Case Studies</Link>
+          <Link href="/insights" className="text-sm font-medium text-[#707070] hover:text-[#EE3539] transition-colors">Insights</Link>
         </nav>
 
         <Link href="/contact" className="bg-[#404297] text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-[#EE3539] transition-colors">

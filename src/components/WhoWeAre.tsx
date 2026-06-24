@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { MoveRight } from "lucide-react";
 
 export default function WhoWeAre() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -55,9 +56,9 @@ export default function WhoWeAre() {
             <div className="mt-auto flex justify-end">
               <Link
                 href="/about"
-                className="inline-flex items-center justify-center w-10 h-10 rounded-full border-2 border-white hover:bg-white hover:text-[#EE3539] transition-colors text-white text-lg font-bold"
+                className="inline-flex items-center justify-center w-10 h-10  hover:text-[#EE3539] transition-colors text-white text-lg font-bold"
               >
-                →
+                <MoveRight />
               </Link>
             </div>
           </div>

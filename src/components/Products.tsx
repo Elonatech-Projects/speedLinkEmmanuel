@@ -123,7 +123,7 @@ export default function Products() {
     <section className="bg-[#e8eaf0] py-16 px-6">
       <div className="max-w-6xl mx-auto">
         {/* Title */}
-        <div
+        <div className="mb-12 border-b border-[#CAD0F7] md:border-lg"
           ref={titleRef}
           style={{
             transition: "opacity 0.7s ease-out, transform 0.7s ease-out",

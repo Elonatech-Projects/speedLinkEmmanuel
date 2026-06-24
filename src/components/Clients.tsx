@@ -77,13 +77,14 @@ export default function Clients() {
                 className="flex-shrink-0 p-2"
                 style={{ width: `${itemWidth}%` }}
               >
-                <div className="bg-white rounded-lg shadow-md p-6 flex items-center justify-center h-[140px] md:h-[120px] hover:shadow-lg transition-shadow">
-                  <div className="relative w-full h-full">
+                <div className="bg-white rounded-lg shadow-md  flex items-center justify-center h-[100px] md:h-[90px] hover:shadow-lg transition-shadow">
+                  <div className="relative w-full h-full transform scale-110">
                     <Image
                       src={client.image}
                       alt={client.name}
                       fill
                       className="object-contain"
+                       sizes="(max-w-768px) 150px, 200px"
                     />
                   </div>
                 </div>

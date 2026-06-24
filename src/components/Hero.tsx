@@ -39,7 +39,7 @@ export default function Hero() {
           <span>100+ advanced tech projects</span>
           <Link
             href="/about"
-            className="bg-[#AEB8FE]/70 text-[#404297] hover:bg-[#EE3539] text-white text-xs font-semibold px-4 py-1.5 rounded-full transition-colors whitespace-nowrap"
+            className="bg-[#AEB8FE] text-[#7974BB] hover:bg-[#EE3539] hover:text-white text-xs font-semibold px-4 py-1.5 rounded-full transition-colors whitespace-nowrap"
           >
             Learn More
           </Link>
