@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { MoveRight } from "lucide-react";
 
 const IT_IMAGES = ["/Internet-Services.webp", "/Access-Control-Technology.webp", "/CCTV-Security-Camera-e1762521184809.webp"];
 
@@ -67,9 +68,9 @@ function ImageCard({
         <h3 className="text-white font-bold text-lg leading-tight max-w-[60%]">{title}</h3>
         <Link
           href={href}
-          className="self-end w-9 h-9 rounded-full border-2 border-white flex items-center justify-center text-white hover:bg-white hover:text-black transition-colors"
+          className="self-end w-9 h-9  flex items-center justify-center text-white transition-colors"
         >
-          →
+          <MoveRight/>
         </Link>
       </div>
     </div>
@@ -109,37 +110,37 @@ export default function Services() {
 
           {/* IT Services — spans 2 cols × 2 rows */}
           {/* IT Services — spans 2 cols × 2 rows */}
-<div
-  ref={itRef}
-  style={{
-    transition: "opacity 0.7s ease-out, transform 0.7s ease-out",
-    opacity: itVisible ? 1 : 0,
-    transform: itVisible ? "translateY(0)" : "translateY(40px)",
-  }}
-  className="relative overflow-hidden md:col-span-2 md:row-span-2 h-[420px] md:h-auto rounded-tl-4xl rounded-tr-none md:rounded-tr-none md:rounded-tl-4xl"
->
-  <Image src={IT_IMAGES[itImgIndex]} alt="IT Services" fill className="object-cover transition-opacity duration-1000" />
-  <div className="absolute inset-0 bg-black/50" />
-  
-  {/* Added "items-start" here to prevent children from stretching to full-width */}
-  <div className="absolute inset-0 flex flex-col justify-between items-start p-5 md:pb-25 md:pl-10 md:pt-10">
-    <h3 className="text-white font-bold text-xl md:pl-5">IT Services</h3>
-    
-    {/* Cleaned up overlay panel to match your new screenshot exactly */}
-    <div className="flex flex-col gap-2 bg-white/65 backdrop-blur-md p-4 rounded-2xl max-w-[460px] w-full border border-white/10 ">
-      {itServices.map((s) => (
-        <Link
-          key={s.label}
-          href={`/services/${s.label.toLowerCase().replace(/\s/g, "-").replace(/&/g, "and")}`}
-          className="bg-white rounded-xl px-2 py-1 md:py-2 flex items-center gap-3 transition-all duration-300 group hover:translate-x-1"
+        <div
+          ref={itRef}
+          style={{
+            transition: "opacity 0.7s ease-out, transform 0.7s ease-out",
+            opacity: itVisible ? 1 : 0,
+            transform: itVisible ? "translateY(0)" : "translateY(40px)",
+          }}
+          className="relative overflow-hidden md:col-span-2 md:row-span-2 h-[420px] md:h-auto rounded-tl-4xl rounded-tr-none md:rounded-tr-none md:rounded-tl-4xl"
         >
-          <span className="w-8 h-8 rounded-full bg-[#404297] flex items-center justify-center text-white text-sm flex-shrink-0 group-hover:bg-[#EE3539] transition-colors">{s.icon}</span>
-          <span className="text-sm text-[#707070] text-[16px]">{s.label}</span>
-        </Link>
-      ))}
-    </div>
-  </div>
-</div>
+          <Image src={IT_IMAGES[itImgIndex]} alt="IT Services" fill className="object-cover transition-opacity duration-1000" />
+          <div className="absolute inset-0 bg-black/50" />
+  
+            {/* Added "items-start" here to prevent children from stretching to full-width */}
+            <div className="absolute inset-0 flex flex-col justify-between items-start p-5 md:pb-25 md:pl-10 md:pt-10">
+              <h3 className="text-white font-bold text-xl md:pl-5">IT Services</h3>
+    
+              {/*  Cleaned up overlay panel to match your new screenshot exactly */}
+              <div className="flex flex-col gap-2 bg-white/65 backdrop-blur-md p-4 rounded-2xl max-w-[460px] w-full border border-white/10 ">
+                {itServices.map((s) => (
+                <Link
+                  key={s.label}
+                  href={`/services/${s.label.toLowerCase().replace(/\s/g, "-").replace(/&/g, "and")}`}
+                  className="bg-white rounded-xl px-2 py-1 md:py-2 flex items-center gap-3 transition-all duration-300 group hover:translate-x-1"
+                >
+                  <span className="w-8 h-8 rounded-full bg-[#404297] flex items-center justify-center text-white text-sm flex-shrink-0 group-hover:bg-[#EE3539] transition-colors">{s.icon}</span>
+                  <span className="text-sm text-[#707070] text-[16px]">{s.label}</span>
+                </Link>
+                ))}
+              </div>
+            </div>
+        </div>
 
 
           {/* Digital Marketing — col 3, row 1 */}
