@@ -3,6 +3,11 @@ const dotenv = require("dotenv");
 const bcrypt = require("bcryptjs");
 const path = require("path");
 
+
+const dns = require("dns");
+dns.setServers(["1.1.1.1", "8.8.8.8"]); 
+
+
 // Load .env from the backend/ folder regardless of where the script is run from
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
