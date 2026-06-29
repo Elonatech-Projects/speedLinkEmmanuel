@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 type DropdownKey = "services" | "products" | null;
 
@@ -10,6 +11,24 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<DropdownKey>(null);
   const [mobileExpanded, setMobileExpanded] = useState<DropdownKey>(null);
+  const pathname = usePathname();
+
+  const isActive = (href: string) =>
+    pathname === href || pathname.startsWith(href + "/");
+
+  const navLinkClass = (href: string) =>
+    `text-sm transition-colors ${
+      isActive(href)
+        ? "font-bold text-[#404297]"
+        : "font-medium text-[#707070] hover:text-[#EE3539]"
+    }`;
+
+  const mobileLinkClass = (href: string) =>
+    `text-sm px-4 py-3 rounded transition-colors ${
+      isActive(href)
+        ? "bg-[#404297] text-white font-bold"
+        : "bg-gray-100 text-gray-600 hover:bg-[#404297] hover:text-white"
+    }`;
 
   return (
     <header className="w-full bg-white shadow-sm sticky top-0 z-50">
@@ -21,7 +40,7 @@ export default function Navbar() {
         </Link>
 
         <nav className="flex items-center gap-4">
-          <Link href="/about" className="text-sm font-medium text-[#707070] hover:text-[#EE3539] transition-colors">About</Link>
+          <Link href="/about" className={navLinkClass("/about")}>About</Link>
 
           {/* Products Mega Menu */}
           <div className="relative" onMouseEnter={() => setActiveDropdown("products")} onMouseLeave={() => setActiveDropdown(null)}>
@@ -120,6 +139,7 @@ export default function Navbar() {
             )}
           </div>
 
+          <Link href="/courses" className="text-sm font-medium text-[#707070] hover:text-[#EE3539] transition-colors">Courses</Link>
           <Link href="/case-studies" className="text-sm font-medium text-[#707070] hover:text-[#EE3539] transition-colors">Case Studies</Link>
           <Link href="/insights" className="text-sm font-medium text-[#707070] hover:text-[#EE3539] transition-colors">Insights</Link>
         </nav>
@@ -268,6 +288,10 @@ export default function Navbar() {
             )}
           </div>
 
+          <Link href="/courses" onClick={() => setMenuOpen(false)}
+            className="bg-gray-100 text-gray-600 text-sm px-4 py-3 rounded hover:bg-[#404297] hover:text-white transition-colors">
+            Courses
+          </Link>
           <Link href="/case-studies" onClick={() => setMenuOpen(false)}
             className="bg-gray-100 text-gray-600 text-sm px-4 py-3 rounded hover:bg-[#404297] hover:text-white transition-colors">
             Case Studies

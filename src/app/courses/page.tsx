@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import api from "@/lib/api";
 
 interface Course {
@@ -15,6 +14,17 @@ interface Course {
   image: string;
 }
 
+const categories = [
+  "Web Development",
+  "Cybersecurity",
+  "Networking",
+  "Data Science",
+  "Digital Marketing",
+  "Cloud Computing",
+  "UI/UX Design",
+  "ERP & Business",
+];
+
 export default function CoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
@@ -22,27 +32,15 @@ export default function CoursesPage() {
   const [category, setCategory] = useState("");
   const [error, setError] = useState("");
 
-  const categories = [
-    "Web Development",
-    "Cybersecurity",
-    "Networking",
-    "Data Science",
-    "Digital Marketing",
-    "Cloud Computing",
-    "UI/UX Design",
-    "ERP & Business",
-  ];
-
-  const fetchCourses = async () => {
+  const fetchCourses = async (searchVal: string, categoryVal: string) => {
     try {
       setLoading(true);
       const params: Record<string, string> = {};
-      if (search) params.search = search;
-      if (category) params.category = category;
-
+      if (searchVal) params.search = searchVal;
+      if (categoryVal) params.category = categoryVal;
       const res = await api.get("/courses", { params });
       setCourses(res.data.courses);
-    } catch (err) {
+    } catch {
       setError("Failed to load courses. Please try again.");
     } finally {
       setLoading(false);
@@ -50,12 +48,13 @@ export default function CoursesPage() {
   };
 
   useEffect(() => {
-    fetchCourses();
+    fetchCourses("", category);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category]);
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    fetchCourses();
+    fetchCourses(search, category);
   };
 
   return (
@@ -79,11 +78,11 @@ export default function CoursesPage() {
               placeholder="Search courses..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <button
               type="submit"
-              className="bg-blue-700 text-white px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-800 transition-colors"
+              className="bg-[#404297] text-white px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-[#EE3539] transition-colors"
             >
               Search
             </button>
@@ -92,7 +91,7 @@ export default function CoursesPage() {
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
           >
             <option value="">All Categories</option>
             {categories.map((cat) => (
@@ -101,7 +100,7 @@ export default function CoursesPage() {
           </select>
         </div>
 
-        {/* Loading */}
+        {/* Loading skeletons */}
         {loading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(6)].map((_, i) => (
@@ -122,15 +121,23 @@ export default function CoursesPage() {
         {/* Courses Grid */}
         {!loading && !error && (
           <>
-            <p className="text-sm text-gray-500 mb-6">{courses.length} course{courses.length !== 1 ? "s" : ""} found</p>
+            <p className="text-sm text-gray-500 mb-6">
+              {courses.length} course{courses.length !== 1 ? "s" : ""} found
+            </p>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {courses.map((course) => (
+              {courses.map((course, index) => (
                 <Link
                   key={course._id}
                   href={`/courses/${course._id}`}
-                  className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden group"
+                  className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all overflow-hidden group opacity-0"
+                  style={{
+                    animation: "floatUp 0.5s ease forwards",
+                    animationDelay: `${index * 80}ms`,
+                  }}
                 >
                   <div className="relative h-48 overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={course.image}
                       alt={course.title}
@@ -149,7 +156,7 @@ export default function CoursesPage() {
                     </p>
                     <div className="flex items-center justify-between">
                       <span className="text-blue-700 font-bold text-lg">
-                        ₦{course.price.toLocaleString()}
+                        &#x20A6;{course.price.toLocaleString()}
                       </span>
                       <span className="text-gray-400 text-sm">{course.duration}</span>
                     </div>
@@ -172,6 +179,20 @@ export default function CoursesPage() {
           </>
         )}
       </div>
+
+      {/* Float-up keyframe */}
+      <style>{`
+        @keyframes floatUp {
+          from {
+            opacity: 0;
+            transform: translateY(40px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </div>
   );
 }
