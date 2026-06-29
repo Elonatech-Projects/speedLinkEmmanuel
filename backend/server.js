@@ -14,10 +14,22 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Routes (to be added in Phase 6)
+// Routes
+app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/courses", require("./routes/courseRoutes"));
+app.use("/api/cart", require("./routes/cartRoutes"));
+app.use("/api", require("./routes/enrollmentRoutes"));
+app.use("/api/payment", require("./routes/paymentRoutes"));
+app.use("/api/admin", require("./routes/adminRoutes"));
+
+// Health check
 app.get("/", (req, res) => {
-  res.json({ message: "Speedlink Learning API is running" });
+  res.json({ message: "Speedlink Learning API is running ✅" });
 });
+
+// Error handler (must be last)
+const { errorHandler } = require("./middleware/errorHandler");
+app.use(errorHandler);
 
 // Connect to MongoDB then start server
 const PORT = process.env.PORT || 5000;
