@@ -54,7 +54,7 @@ export default function MyCoursesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#e8eaf0]">
       {/* Header */}
       <div className="bg-[#0a1628] text-white py-16 px-6">
         <div className="max-w-7xl mx-auto">
@@ -73,7 +73,7 @@ export default function MyCoursesPage() {
             <p className="text-gray-500 mb-6">Start your learning journey by enrolling in a course</p>
             <Link
               href="/courses"
-              className="inline-block bg-blue-700 text-white font-semibold px-8 py-3 rounded-full hover:bg-blue-800 transition-colors"
+              className="inline-block bg-[#404297]  text-white font-semibold px-8 py-3 rounded-full hover:bg-blue-800 transition-colors"
             >
               Browse Courses
             </Link>

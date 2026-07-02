@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import api from "@/lib/api";
+import CartIcon from "@/components/CartIcon";
 
 interface Course {
   _id: string;
@@ -58,7 +59,7 @@ export default function CoursesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#e8eaf0]">
       {/* Header */}
       <div className="bg-[#0a1628] text-white py-16 px-6">
         <div className="max-w-7xl mx-auto text-center">
@@ -67,6 +68,12 @@ export default function CoursesPage() {
             Explore our cutting-edge tech courses and start learning today
           </p>
         </div>
+      </div>
+      <div className=" max-w-6xl mx-auto  flex flex-row pt-4 justify-between sticky top">
+        <Link href="/my-courses" className="bg-blue-100 text-[#EE3539] text-sm font-semibold px-3 py-1 rounded-full hover:text-[#404297] transition-colors">
+          View My Courses
+        </Link>
+        <CartIcon />
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-12">
@@ -143,19 +150,19 @@ export default function CoursesPage() {
                       alt={course.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    <span className="absolute top-3 left-3 bg-blue-700 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                    <span className="absolute top-3 left-3 bg-blue-100 text-[#EE3539] text-xs font-semibold px-3 py-1 rounded-full">
                       {course.category}
                     </span>
                   </div>
                   <div className="p-5">
-                    <h3 className="font-bold text-gray-900 text-lg mb-2 leading-snug">
+                    <h3 className="font-bold text-[#404297] text-lg mb-2 leading-snug">
                       {course.title}
                     </h3>
                     <p className="text-gray-500 text-sm mb-4 line-clamp-2">
                       {course.description}
                     </p>
                     <div className="flex items-center justify-between">
-                      <span className="text-blue-700 font-bold text-lg">
+                      <span className="text-[#404297] font-bold text-lg">
                         &#x20A6;{course.price.toLocaleString()}
                       </span>
                       <span className="text-gray-400 text-sm">{course.duration}</span>
@@ -170,7 +177,7 @@ export default function CoursesPage() {
                 <p className="text-lg">No courses found.</p>
                 <button
                   onClick={() => { setSearch(""); setCategory(""); }}
-                  className="mt-4 text-blue-700 underline text-sm"
+                  className="mt-4 text-[#404297] underline text-sm"
                 >
                   Clear filters
                 </button>

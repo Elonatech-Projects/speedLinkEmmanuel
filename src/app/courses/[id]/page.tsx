@@ -71,13 +71,13 @@ export default function CourseDetailPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className=" flex flex-row-reverse ">
-          <Link href="/my-courses" className="bg-blue-100 text-[#EE3539] text-sm font-semibold px-3 py-1 rounded-full hover:text-[#404297] transition-colors">
-            My Courses
-          </Link>
-          <CartIcon />
-        </div>
-      <div className="max-w-5xl mx-auto px-6 py-12">
+      <div className=" max-w-6xl mx-auto  flex flex-row pt-4 justify-around sticky ">
+        <Link href="/my-courses" className="bg-blue-100 text-[#EE3539] text-sm font-semibold px-3 py-1 rounded-full hover:text-[#404297] transition-colors">
+          My Courses
+        </Link>
+        <CartIcon />
+      </div>
+      <div className="max-w-5xl mx-auto px-6 py-5">
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
           <img src={course.image} alt={course.title} className="w-full h-72 object-cover" />
           <div className="p-8">
@@ -89,7 +89,7 @@ export default function CourseDetailPage() {
 
             <div className="flex items-center gap-6 mb-8 text-sm text-gray-500">
               <span>⏱ {course.duration}</span>
-              <span className="text-2xl font-bold text-blue-700">₦{course.price.toLocaleString()}</span>
+              <span className="text-2xl font-bold text-[#404297]">₦{course.price.toLocaleString()}</span>
             </div>
 
             {cartMsg && (
