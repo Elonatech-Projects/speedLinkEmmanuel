@@ -70,7 +70,7 @@ export default function CourseDetailPage() {
   if (!course) return null;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen [#e8eaf0]">
       <div className=" max-w-6xl mx-auto  flex flex-row pt-4 justify-around sticky ">
         <Link href="/my-courses" className="bg-blue-100 text-[#EE3539] text-sm font-semibold px-3 py-1 rounded-full hover:text-[#404297] transition-colors">
           My Courses

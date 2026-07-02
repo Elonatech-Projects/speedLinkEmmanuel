@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 type DropdownKey = "services" | "products" | null;
 
@@ -11,7 +11,23 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<DropdownKey>(null);
   const [mobileExpanded, setMobileExpanded] = useState<DropdownKey>(null);
+  const [user, setUser] = useState<any>(null);
   const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    router.push("/login");
+  };
 
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + "/");
@@ -144,9 +160,31 @@ export default function Navbar() {
           <Link href="/insights" className="text-sm font-medium text-[#707070] hover:text-[#EE3539] transition-colors">Insights</Link>
         </nav>
 
-        <Link href="/contact" className="bg-[#404297] text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-[#EE3539] transition-colors">
-          Book a Call
-        </Link>
+        <div className="flex items-center gap-3">
+          {user ? (
+            <>
+              
+              <button
+                onClick={handleLogout}
+                className="text-sm font-medium text-[#707070] hover:text-[#EE3539] transition-colors"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link href="/login" className="text-sm font-medium text-[#707070] hover:text-[#EE3539] transition-colors">
+                Login
+              </Link>
+              <Link href="/register" className="text-sm font-medium text-[#707070] hover:text-[#EE3539] transition-colors">
+                Register
+              </Link>
+            </>
+          )}
+          <Link href="/contact" className="bg-[#404297] text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-[#EE3539] transition-colors">
+            Book a Call
+          </Link>
+        </div>
       </div>
 
       {/* ── MOBILE HEADER: Logo | Hamburger (center) | Book a Call ── */}
@@ -301,6 +339,30 @@ export default function Navbar() {
             Insights
           </Link>
           <div className="mt-auto pt-6">
+            {user ? (
+              <>
+                <div className="bg-gray-100 text-gray-600 text-sm px-4 py-3 rounded mb-2">
+                  Hi, {user.username}
+                </div>
+                <button
+                  onClick={() => { handleLogout(); setMenuOpen(false); }}
+                  className="block w-full bg-gray-200 text-gray-700 text-sm font-semibold px-4 py-3 rounded-full text-center hover:bg-gray-300 transition-colors mb-2"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/login" onClick={() => setMenuOpen(false)}
+                  className="block w-full bg-gray-200 text-gray-700 text-sm font-semibold px-4 py-3 rounded-full text-center hover:bg-gray-300 transition-colors mb-2">
+                  Login
+                </Link>
+                <Link href="/register" onClick={() => setMenuOpen(false)}
+                  className="block w-full bg-gray-200 text-gray-700 text-sm font-semibold px-4 py-3 rounded-full text-center hover:bg-gray-300 transition-colors mb-2">
+                  Register
+                </Link>
+              </>
+            )}
             <Link href="/contact" onClick={() => setMenuOpen(false)}
               className="block w-full bg-[#353380] text-white text-sm font-semibold px-4 py-3 rounded-full text-center hover:bg-[#EE3539] transition-colors">
               Book a Call

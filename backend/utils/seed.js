@@ -4,8 +4,8 @@ const bcrypt = require("bcryptjs");
 const path = require("path");
 
 
-const dns = require("dns");
-dns.setServers(["1.1.1.1", "8.8.8.8"]); 
+//const dns = require("dns");
+//dns.setServers(["1.1.1.1", "8.8.8.8"]); 
 
 
 // Load .env from the backend/ folder regardless of where the script is run from

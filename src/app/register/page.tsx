@@ -32,7 +32,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
+    <div className="min-h-screen bg-[#e8eaf0] flex items-center justify-center px-6">
       <div className="bg-white rounded-2xl shadow-sm w-full max-w-md p-8">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Create an account</h1>
         <p className="text-gray-500 text-sm mb-8">Join Speedlink and start learning today</p>
@@ -86,7 +86,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-700 text-white font-semibold py-3 rounded-lg hover:bg-blue-800 transition-colors disabled:opacity-60"
+            className="w-full bg-[#404297] text-white font-semibold py-3 rounded-lg hover:bg-blue-800 transition-colors disabled:opacity-60"
           >
             {loading ? "Creating account..." : "Create Account"}
           </button>

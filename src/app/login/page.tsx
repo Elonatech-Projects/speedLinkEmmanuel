@@ -32,7 +32,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
+    <div className="min-h-screen bg-[#e8eaf0] flex items-center justify-center px-6">
       <div className="bg-white rounded-2xl shadow-sm w-full max-w-md p-8">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome back</h1>
         <p className="text-gray-500 text-sm mb-8">Log in to your Speedlink account</p>
