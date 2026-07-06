@@ -10,9 +10,6 @@ dotenv.config();
 
 const app = express();
 
-// Middleware
-// backend/server.js
-const cors = require("cors");
 
 const allowedOrigins = [
   "http://localhost:3000",                  // Local testing
