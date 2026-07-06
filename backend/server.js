@@ -16,7 +16,7 @@ const cors = require("cors");
 
 const allowedOrigins = [
   "http://localhost:3000",                  // Local testing
-  process.env.CLIENT_URL // Production domain
+  "https://speed-link-emmanuel.vercel.app"  // Production domain
 ];
 
 app.use(cors({
