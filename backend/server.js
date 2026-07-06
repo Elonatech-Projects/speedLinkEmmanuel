@@ -11,11 +11,31 @@ dotenv.config();
 const app = express();
 
 // Middleware
+// backend/server.js
+const cors = require("cors");
+
+const allowedOrigins = [
+  "http://localhost:3000",                  // Local testing
+  process.env.CLIENT_URL // Production domain
+];
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:3000",
+  origin: function (origin, callback) {
+    // Allow server-to-server or postman requests with no origin
+    if (!origin) return callback(null, true);
+    
+    // Automatically match regular production list OR any dynamic Vercel testing domains
+    if (allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
+      return callback(null, true);
+    } else {
+      return callback(new Error("CORS policy restriction applied"));
+    }
+  },
   credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
-app.use(express.json());
+
 
 // Routes
 app.use("/api/auth", require("./routes/authRoutes"));
