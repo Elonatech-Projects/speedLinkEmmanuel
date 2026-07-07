@@ -24,7 +24,7 @@ interface Course {
 interface Transaction {
   _id: string;
   user: { username: string; email: string };
-  course: { title: string; price: number };
+  course?: { title: string; price: number } | null;
   amount: number;
   reference: string;
   status: string;
@@ -229,7 +229,9 @@ export default function AdminDashboard() {
                       <div>{tx.user.username}</div>
                       <div className="text-gray-500 text-xs">{tx.user.email}</div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-900">{tx.course.title}</td>
+                    <td className="px-6 py-4 text-sm text-gray-900">
+                      {tx.course?.title || <span className="text-gray-400 italic">Multiple courses (cart)</span>}
+                    </td>
                     <td className="px-6 py-4 text-sm text-gray-900 font-bold">
                       ₦{tx.amount.toLocaleString()}
                     </td>
