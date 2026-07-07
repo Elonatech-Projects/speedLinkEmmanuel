@@ -108,9 +108,11 @@ export default function CourseDetailPage() {
 
             <div className="flex items-center gap-6 mb-8 text-sm text-gray-500">
               <span>⏱ {course.duration}</span>
-              <span className="text-2xl font-bold text-[#404297]">
-                &#x20A6;{course.price.toLocaleString()}
-              </span>
+              {!isEnrolled && (
+                <span className="text-2xl font-bold text-[#404297]">
+                  &#x20A6;{course.price.toLocaleString()}
+                </span>
+              )}
             </div>
 
             {msg && (
