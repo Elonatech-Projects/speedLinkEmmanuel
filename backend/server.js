@@ -33,6 +33,9 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
+// parse incoming JSON payloads before passing them to the routes!
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
 // Routes
 app.use("/api/auth", require("./routes/authRoutes"));
