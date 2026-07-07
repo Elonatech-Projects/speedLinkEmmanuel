@@ -341,9 +341,7 @@ export default function Navbar() {
           <div className="mt-auto pt-6">
             {user ? (
               <>
-                <div className="bg-gray-100 text-gray-600 text-sm px-4 py-3 rounded mb-2">
-                  Hi, {user.username}
-                </div>
+                
                 <button
                   onClick={() => { handleLogout(); setMenuOpen(false); }}
                   className="block w-full bg-gray-200 text-gray-700 text-sm font-semibold px-4 py-3 rounded-full text-center hover:bg-gray-300 transition-colors mb-2"
