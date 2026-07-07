@@ -226,21 +226,23 @@ export default function AdminDashboard() {
                 {transactions.map((tx) => (
                   <tr key={tx._id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 text-sm text-gray-900">
-                      <div>{tx.user.username}</div>
-                      <div className="text-gray-500 text-xs">{tx.user.email}</div>
+                      <div>{tx.user?.username || "Unknown"}</div>
+                      <div className="text-gray-500 text-xs">{tx.user?.email || ""}</div>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-900">
                       {tx.course?.title || <span className="text-gray-400 italic">Multiple courses (cart)</span>}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-900 font-bold">
-                      ₦{tx.amount.toLocaleString()}
+                      &#x20A6;{tx.amount.toLocaleString()}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600 font-mono text-xs">
+                    <td className="px-6 py-4 text-sm text-gray-600 font-mono text-xs truncate max-w-xs">
                       {tx.reference}
                     </td>
                     <td className="px-6 py-4">
                       <span className={`text-xs font-semibold px-3 py-1 rounded-full ${
-                        tx.status === "success" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
+                        tx.status === "success" ? "bg-green-100 text-green-700" :
+                        tx.status === "failed" ? "bg-red-100 text-red-700" :
+                        "bg-yellow-100 text-yellow-700"
                       }`}>
                         {tx.status}
                       </span>
