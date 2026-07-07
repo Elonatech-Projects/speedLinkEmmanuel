@@ -3,9 +3,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import api from "@/lib/api";
-import myCourses from "@/app/my-courses/page";
-import Link from "next/dist/client/link";
-import CartIcon from "@/components/CartIcon";
 
 interface Course {
   _id: string;
@@ -22,21 +19,47 @@ export default function CourseDetailPage() {
   const router = useRouter();
   const [course, setCourse] = useState<Course | null>(null);
   const [loading, setLoading] = useState(true);
-  const [cartMsg, setCartMsg] = useState("");
-  const [cartLoading, setCartLoading] = useState(false);
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  const [inCart, setInCart] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
+  const [msg, setMsg] = useState("");
 
   useEffect(() => {
-    const fetchCourse = async () => {
+    const fetchAll = async () => {
       try {
-        const res = await api.get(`/courses/${id}`);
-        setCourse(res.data.course);
+        const courseRes = await api.get(`/courses/${id}`);
+        setCourse(courseRes.data.course);
+
+        const token = localStorage.getItem("token");
+        if (token) {
+          // Check enrollments
+          try {
+            const enrollRes = await api.get("/my-courses");
+            const enrolled = enrollRes.data.enrollments.some(
+              (e: { course: { _id: string }; paymentStatus: string }) =>
+                e.course._id === id && e.paymentStatus === "paid"
+            );
+            setIsEnrolled(enrolled);
+          } catch {}
+
+          // Check cart
+          try {
+            const cartRes = await api.get("/cart");
+            const alreadyInCart = cartRes.data.cartItems.some(
+              (item: { course: { _id: string } }) => item.course._id === id
+            );
+            setInCart(alreadyInCart);
+          } catch {}
+        }
       } catch {
         router.push("/courses");
       } finally {
         setLoading(false);
       }
     };
-    if (id) fetchCourse();
+
+    if (id) fetchAll();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const addToCart = async () => {
@@ -45,24 +68,25 @@ export default function CourseDetailPage() {
       router.push("/login");
       return;
     }
-    setCartLoading(true);
+    setActionLoading(true);
     try {
       await api.post("/cart", { courseId: id });
-      setCartMsg("Added to cart successfully!");
-      // Trigger cart update event for CartIcon component
+      setInCart(true);
+      setMsg("Added to cart!");
       window.dispatchEvent(new Event("cartUpdate"));
-    } catch (err: any) {
-      setCartMsg(err.response?.data?.message || "Failed to add to cart");
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } };
+      setMsg(error.response?.data?.message || "Failed to add to cart");
     } finally {
-      setCartLoading(false);
-      setTimeout(() => setCartMsg(""), 3000);
+      setActionLoading(false);
+      setTimeout(() => setMsg(""), 3000);
     }
   };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-700" />
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#404297]" />
       </div>
     );
   }
@@ -70,42 +94,69 @@ export default function CourseDetailPage() {
   if (!course) return null;
 
   return (
-    <div className="min-h-screen [#e8eaf0]">
-      <div className=" max-w-6xl mx-auto  flex flex-row pt-4 justify-around sticky ">
-        <Link href="/my-courses" className="bg-blue-100 text-[#EE3539] text-sm font-semibold px-3 py-1 rounded-full hover:text-[#404297] transition-colors">
-          My Courses
-        </Link>
-        <CartIcon />
-      </div>
-      <div className="max-w-5xl mx-auto px-6 py-5">
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-5xl mx-auto px-6 py-12">
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={course.image} alt={course.title} className="w-full h-72 object-cover" />
           <div className="p-8">
-            <span className="bg-blue-100 text-[#EE3539] text-xs font-semibold px-3 py-1 rounded-full">
+            <span className="bg-blue-100 text-[#404297] text-xs font-semibold px-3 py-1 rounded-full">
               {course.category}
             </span>
-            <h1 className="text-3xl font-bold text-[#404297] mt-4 mb-3">{course.title}</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mt-4 mb-3">{course.title}</h1>
             <p className="text-gray-600 leading-relaxed mb-6">{course.description}</p>
 
             <div className="flex items-center gap-6 mb-8 text-sm text-gray-500">
               <span>⏱ {course.duration}</span>
-              <span className="text-2xl font-bold text-[#404297]">₦{course.price.toLocaleString()}</span>
+              <span className="text-2xl font-bold text-[#404297]">
+                &#x20A6;{course.price.toLocaleString()}
+              </span>
             </div>
 
-            {cartMsg && (
-              <div className={`text-sm px-4 py-3 rounded-lg mb-4 ${cartMsg.includes("success") ? "bg-green-50 text-green-700 border border-green-200" : "bg-red-50 text-red-600 border border-red-200"}`}>
-                {cartMsg}
+            {msg && (
+              <div className={`text-sm px-4 py-3 rounded-lg mb-4 ${msg.includes("Added") ? "bg-green-50 text-green-700 border border-green-200" : "bg-red-50 text-red-600 border border-red-200"}`}>
+                {msg}
               </div>
             )}
 
-            <div className="flex gap-4">
-              <button
-                onClick={addToCart}
-                disabled={cartLoading}
-                className="bg-[#404297] text-white font-semibold px-8 py-3 rounded-full hover:bg-[#EE3539] transition-colors disabled:opacity-60"
-              >
-                {cartLoading ? "Adding..." : "Add to Cart"}
-              </button>
+            <div className="flex gap-4 flex-wrap">
+              {isEnrolled ? (
+                // Already enrolled — show access button
+                <div className="flex items-center gap-4">
+                  <span className="flex items-center gap-2 bg-green-100 text-green-700 font-semibold px-6 py-3 rounded-full">
+                    ✅ Enrolled
+                  </span>
+                  <button
+                    onClick={() => router.push("/my-courses")}
+                    className="bg-[#404297] text-white font-semibold px-8 py-3 rounded-full hover:bg-[#EE3539] transition-colors"
+                  >
+                    Go to My Courses
+                  </button>
+                </div>
+              ) : inCart ? (
+                // Already in cart
+                <div className="flex items-center gap-4">
+                  <span className="flex items-center gap-2 bg-blue-50 text-[#404297] font-semibold px-6 py-3 rounded-full border border-[#404297]/30">
+                    🛒 In Cart
+                  </span>
+                  <button
+                    onClick={() => router.push("/cart")}
+                    className="bg-[#404297] text-white font-semibold px-8 py-3 rounded-full hover:bg-[#EE3539] transition-colors"
+                  >
+                    View Cart & Checkout
+                  </button>
+                </div>
+              ) : (
+                // Not enrolled, not in cart
+                <button
+                  onClick={addToCart}
+                  disabled={actionLoading}
+                  className="bg-[#404297] text-white font-semibold px-8 py-3 rounded-full hover:bg-[#EE3539] transition-colors disabled:opacity-60"
+                >
+                  {actionLoading ? "Adding..." : "Add to Cart"}
+                </button>
+              )}
+
               <button
                 onClick={() => router.back()}
                 className="border border-gray-300 text-gray-700 font-semibold px-8 py-3 rounded-full hover:bg-gray-50 transition-colors"
