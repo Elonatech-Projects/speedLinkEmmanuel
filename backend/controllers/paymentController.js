@@ -30,6 +30,7 @@ const initializePayment = async (req, res) => {
       {
         email: req.user.email,
         amount: amountInKobo,
+        callback_url: `${process.env.CLIENT_URL}/payment/verify`,
         metadata: {
           courseId: course._id.toString(),
           userId: req.user._id.toString(),
