@@ -5,7 +5,7 @@ const Course = require("../models/Course");
 const Cart = require("../models/Cart");
 
 // @route  POST /api/payment/initialize
-// @access Private (student)
+// @access Private (student) — single course
 const initializePayment = async (req, res) => {
   try {
     const { courseId } = req.body;
@@ -62,7 +62,7 @@ const initializePayment = async (req, res) => {
 };
 
 // @route  POST /api/payment/initialize-cart
-// @access Private (student) — pays for entire cart in one transaction
+// @access Private (student) — entire cart in one transaction
 const initializeCartPayment = async (req, res) => {
   try {
     const cartItems = await Cart.find({ user: req.user._id }).populate("course");
@@ -71,7 +71,6 @@ const initializeCartPayment = async (req, res) => {
       return res.status(400).json({ message: "Your cart is empty" });
     }
 
-    // Filter out already enrolled courses
     const unenrolled = [];
     for (const item of cartItems) {
       const exists = await Enrollment.findOne({
@@ -112,7 +111,6 @@ const initializeCartPayment = async (req, res) => {
 
     const { authorization_url, reference } = response.data.data;
 
-    // Save one transaction for the whole cart
     await Transaction.create({
       user: req.user._id,
       amount: totalAmount,
@@ -150,11 +148,9 @@ const verifyPayment = async (req, res) => {
 
     const { courseId, courseIds, userId, type } = data.metadata;
 
-    // Update transaction status
     await Transaction.findOneAndUpdate({ reference }, { status: "success" }, { new: true });
 
     if (type === "cart" && courseIds) {
-      // Enroll in all courses from cart
       for (const cId of courseIds) {
         await Enrollment.findOneAndUpdate(
           { user: userId, course: cId },
@@ -162,10 +158,8 @@ const verifyPayment = async (req, res) => {
           { upsert: true, new: true }
         );
       }
-      // Clear cart
       await Cart.deleteMany({ user: userId });
     } else if (courseId) {
-      // Single course enrollment
       await Enrollment.findOneAndUpdate(
         { user: userId, course: courseId },
         { user: userId, course: courseId, paymentStatus: "paid" },
@@ -180,114 +174,3 @@ const verifyPayment = async (req, res) => {
 };
 
 module.exports = { initializePayment, initializeCartPayment, verifyPayment };
-
-// @route  POST /api/payment/initialize
-// @access Private (student)
-const initializePayment = async (req, res) => {
-  try {
-    const { courseId } = req.body;
-
-    const course = await Course.findById(courseId);
-    if (!course) return res.status(404).json({ message: "Course not found" });
-
-    // Check if already enrolled
-    const existing = await Enrollment.findOne({
-      user: req.user._id,
-      course: courseId,
-      paymentStatus: "paid",
-    });
-    if (existing) {
-      return res.status(400).json({ message: "Already enrolled in this course" });
-    }
-
-    // Amount in kobo (Paystack uses smallest currency unit)
-    const amountInKobo = course.price * 100;
-
-    const response = await axios.post(
-      "https://api.paystack.co/transaction/initialize",
-      {
-        email: req.user.email,
-        amount: amountInKobo,
-        callback_url: `${process.env.CLIENT_URL}/payment/verify`,
-        metadata: {
-          courseId: course._id.toString(),
-          userId: req.user._id.toString(),
-          courseName: course.title,
-        },
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    const { authorization_url, reference } = response.data.data;
-
-    // Save a pending transaction
-    await Transaction.create({
-      user: req.user._id,
-      course: courseId,
-      amount: course.price,
-      reference,
-      status: "pending",
-    });
-
-    res.json({
-      message: "Payment initialized",
-      authorization_url,
-      reference,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-// @route  GET /api/payment/verify?reference=xxx
-// @access Private (student)
-const verifyPayment = async (req, res) => {
-  try {
-    const { reference } = req.query;
-    if (!reference) {
-      return res.status(400).json({ message: "Payment reference is required" });
-    }
-
-    const response = await axios.get(
-      `https://api.paystack.co/transaction/verify/${reference}`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
-        },
-      }
-    );
-
-    const data = response.data.data;
-
-    if (data.status !== "success") {
-      return res.status(400).json({ message: "Payment not successful" });
-    }
-
-    const { courseId, userId } = data.metadata;
-
-    // Update transaction status
-    await Transaction.findOneAndUpdate(
-      { reference },
-      { status: "success" },
-      { new: true }
-    );
-
-    // Create or update enrollment
-    await Enrollment.findOneAndUpdate(
-      { user: userId, course: courseId },
-      { user: userId, course: courseId, paymentStatus: "paid" },
-      { upsert: true, new: true }
-    );
-
-    res.json({ message: "Payment verified. Enrollment successful." });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-module.exports = { initializePayment, verifyPayment };
