@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import api from "@/lib/api";
 
-export default function PaymentVerifyPage() {
+function VerifyContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const reference = searchParams.get("reference");
@@ -24,14 +24,15 @@ export default function PaymentVerifyPage() {
         const res = await api.get(`/payment/verify?reference=${reference}`);
         setStatus("success");
         setMessage(res.data.message || "Payment successful! You are now enrolled.");
-      } catch (err: any) {
+      } catch (err: unknown) {
+        const error = err as { response?: { data?: { message?: string } } };
         setStatus("failed");
-        setMessage(err.response?.data?.message || "Payment verification failed.");
+        setMessage(error.response?.data?.message || "Payment verification failed.");
       }
     };
 
     verify();
-  }, [reference]);
+  }, [reference, router]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
@@ -39,7 +40,7 @@ export default function PaymentVerifyPage() {
 
         {status === "loading" && (
           <>
-            <div className="animate-spin rounded-full h-14 w-14 border-b-2 border-blue-700 mx-auto mb-6" />
+            <div className="animate-spin rounded-full h-14 w-14 border-b-2 border-[#404297] mx-auto mb-6" />
             <h2 className="text-xl font-bold text-gray-900 mb-2">Verifying Payment</h2>
             <p className="text-gray-500 text-sm">Please wait while we confirm your payment...</p>
           </>
@@ -52,12 +53,12 @@ export default function PaymentVerifyPage() {
             <p className="text-gray-500 mb-6">{message}</p>
             <Link
               href="/my-courses"
-              className="inline-block bg-blue-700 text-white font-semibold px-8 py-3 rounded-full hover:bg-blue-800 transition-colors mb-3"
+              className="inline-block bg-[#404297] text-white font-semibold px-8 py-3 rounded-full hover:bg-[#EE3539] transition-colors mb-3"
             >
               View My Courses
             </Link>
             <br />
-            <Link href="/courses" className="text-sm text-blue-700 hover:underline">
+            <Link href="/courses" className="text-sm text-[#404297] hover:underline">
               Browse more courses
             </Link>
           </>
@@ -70,7 +71,7 @@ export default function PaymentVerifyPage() {
             <p className="text-gray-500 mb-6">{message}</p>
             <Link
               href="/cart"
-              className="inline-block bg-blue-700 text-white font-semibold px-8 py-3 rounded-full hover:bg-blue-800 transition-colors"
+              className="inline-block bg-[#404297] text-white font-semibold px-8 py-3 rounded-full hover:bg-[#EE3539] transition-colors"
             >
               Back to Cart
             </Link>
@@ -79,5 +80,17 @@ export default function PaymentVerifyPage() {
 
       </div>
     </div>
+  );
+}
+
+export default function PaymentVerifyPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-14 w-14 border-b-2 border-[#404297]" />
+      </div>
+    }>
+      <VerifyContent />
+    </Suspense>
   );
 }
