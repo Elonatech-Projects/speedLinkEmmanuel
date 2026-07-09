@@ -70,7 +70,7 @@ export default function ForgotPasswordPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-700 text-white font-semibold py-3 rounded-lg hover:bg-blue-800 transition-colors disabled:opacity-60"
+            className="w-full bg-[#404297] text-white font-semibold py-3 rounded-lg hover:bg-[#ee3539] transition-colors disabled:opacity-60"
           >
             {loading ? "Sending..." : "Send Reset Link"}
           </button>
@@ -78,7 +78,7 @@ export default function ForgotPasswordPage() {
 
         <p className="text-center text-sm text-gray-500 mt-6">
           Remember your password?{" "}
-          <Link href="/login" className="text-blue-700 font-medium hover:underline">
+          <Link href="/login" className="text-blue-700 font-medium hover:underline hover:bg-[#ee3539] transition-colors px-1 rounded">
             Log in
           </Link>
         </p>
