@@ -5,9 +5,15 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import api from "@/lib/api";
 
+interface RegisterForm {
+  username: string;
+  email: string;
+  password: string;
+}
+
 export default function RegisterPage() {
   const router = useRouter();
-  const [form, setForm] = useState({ username: "", email: "", password: "" });
+  const [form, setForm] = useState<RegisterForm>({ username: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -24,8 +30,9 @@ export default function RegisterPage() {
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
       router.push("/courses");
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Registration failed");
+    } catch (err: unknown) {
+      const raw = err instanceof Error ? err.message : String(err);
+      setError("Registration failed: " + raw);
     } finally {
       setLoading(false);
     }
