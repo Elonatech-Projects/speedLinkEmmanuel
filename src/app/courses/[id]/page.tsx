@@ -162,10 +162,10 @@ export default function CourseDetailPage() {
               )}
 
               <button
-                onClick={() => router.back()}
+                onClick={() => router.push("/courses")}
                 className="border border-gray-300 text-gray-700 font-semibold px-8 py-3 rounded-full hover:bg-gray-50 transition-colors"
               >
-                Back
+                Back to Courses
               </button>
             </div>
           </div>
