@@ -28,7 +28,11 @@ export default function LoginPage() {
       const res = await api.post("/auth/login", form);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
-      router.push("/courses");
+      
+      // Return to the page the user was trying to access
+      const redirectTo = sessionStorage.getItem("redirectAfterLogin") || "/courses";
+      sessionStorage.removeItem("redirectAfterLogin");
+      router.push(redirectTo);
     } catch (err: unknown) {
       const raw = err instanceof Error ? err.message : String(err);
       setError("Login failed: " + raw);

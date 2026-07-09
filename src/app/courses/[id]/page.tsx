@@ -65,6 +65,8 @@ export default function CourseDetailPage() {
   const addToCart = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
+      // Save current page so we can return after login
+      sessionStorage.setItem("redirectAfterLogin", `/courses/${id}`);
       router.push("/login");
       return;
     }
@@ -138,7 +140,7 @@ export default function CourseDetailPage() {
               ) : inCart ? (
                 // Already in cart
                 <div className="flex items-center gap-4">
-                  <span className="flex items-center gap-2 bg-blue-50 text-[#404297] font-semibold px-6 py-3 rounded-full border border-[#404297]/30">
+                  <span className="flex items-center gap-2 bg-blue-50 text-[#404297]  px-6 py-3 rounded-full border border-[#404297]/30">
                     🛒 In Cart
                   </span>
                   <button
